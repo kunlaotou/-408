@@ -1,3 +1,5 @@
+
+/*方法一：暴力破解*/
 #include "stdio.h"
 #include "math.h"
 
@@ -27,3 +29,49 @@ void main(){
     printf("最小值为%d\n",min);
     return;
 }
+
+
+
+
+
+
+
+/*方法一：数轴优化*/
+#include "stdio.h"
+#include "math.h"
+
+void main(){
+    /*声明并初始化数组S1,S2,S3及其数组长度*/
+    int S1[3] = {-1, 0, 9};             int m = 3;
+    int S2[4] = {-25, -10, 10, 11};     int n = 4;
+    int S3[5] = {2, 9, 17, 30, 41};     int l = 5;
+    /*声明一个结果数组*/
+    int res[3];
+
+    int min = INFINITY;
+    /*定义数组的初始下标*/
+    int i = 0; int j = 0; int k = 0;
+    while(1){
+        /*循环结束条件，即有任意个数组下标走到最后一个元素位置就结束*/
+        if(i == m || j==n || k == l) break;
+        int tmp = abs(S1[i] - S2[j]) + abs(S2[j] - S3[k]) + abs(S3[k] - S1[i]);//计算距离
+        /*判断当前三元组的距离是不是最小，如果是则更新*/
+        if(tmp < min){
+            min = tmp;
+            res[0] = S1[i];
+            res[1] = S2[j];
+            res[2] = S3[k];
+        }
+         /*找最小值，即判断要移动哪个数组的下标*/
+        if(S1[i] <= S2[j] && S1[i] <= S3[k]) i++;
+        else if(S2[j] < S1[i] && S2[j] < S3[k]) j++;
+        else k++;
+    }
+
+    for(int i = 0; i < 3; i++){
+        printf("%d ",res[i]);
+    }
+    printf("最小值%d\n",min);
+    return;
+}
+
