@@ -1,0 +1,91 @@
+/*常用的实现方案有 4 种，这里分别将它们称为
+迭代反转法
+递归反转法
+就地逆置法
+头插法
+
+值得一提的是，递归反转法更适用于反转不带头节点的链表；其它 3 种方法既能反转不带头节点的链表，也能反转带头节点的链表，本小结是带头节点的单链表的头插法
+*/
+
+//
+// Created by tangwenhua on 2022/8/27.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+
+//单链表结构体
+typedef int ElemType;
+typedef struct node{
+    ElemType data;
+    struct node* next;//next指向结点本身
+}LNode, *LinkList;
+
+
+//尾部插入法:带头结点(输入数据与输出数据相同)
+void CreLinkListTail(LinkList L, int n){
+    LNode* s, * r;//r结点
+    ElemType x;
+    int i;
+    r = L;//r结点的初始化，首先指向链表L
+    printf("带头结点尾插法--输入结点:\n");
+    for (i = 0; i < n; i++){
+        scanf("%d", &x);
+        s = (LNode*)malloc(sizeof(LNode));
+        s->next = NULL;//修改
+        s->data = x;
+        //上面三条语句和头部插入法相同
+        r->next = s;//r的下一个结点是s
+        r = s;//r指向s
+    }
+    //if (r != NULL)//r后没有结点 //修改
+    //{
+    //    r->next = NULL;
+    //}
+}
+
+void headReverse(LinkList L) {
+    if (L == NULL || L->next == NULL) {
+        return;
+    }
+    LNode *q, *p, *r;
+    p = L->next; r=p->next;//p为第一个结点，r为第二个结点
+    L->next = NULL; p->next=NULL;//头结点断链，第一个结点断链
+    while(r){
+        q=p;
+        p=r;
+        r=r->next;
+        p->next=q;
+    }
+    L->next=p;
+}
+
+
+//输出链表信息
+void OutPut(LinkList L) {
+    LNode *p;
+    p = L;    //p = L->next; 修改
+    while (p != NULL) {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
+
+
+int main() {
+    int n;//n个结点
+    printf("请在键盘中输入链表有几个结点:\n");
+    scanf("%d", &n);//输入n个结点
+
+    LinkList L = (LinkList)malloc(sizeof(LNode));//空链表的创建
+    L->next = NULL;//指针域为空
+
+    CreLinkListTail(L, n);//尾插入法建立单链表L
+    printf("尾插法--输出建立后的单链表:\n");
+    OutPut(L->next); //输出建立后的单链表
+    headReverse(L);
+    printf("逆置后的单链表:\n");
+    OutPut(L->next);
+    return 0;
+}
