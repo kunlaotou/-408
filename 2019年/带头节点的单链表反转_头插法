@@ -7,10 +7,6 @@
 值得一提的是，递归反转法更适用于反转不带头节点的链表；其它 3 种方法既能反转不带头节点的链表，也能反转带头节点的链表，本小结是带头节点的单链表的头插法
 */
 
-//
-// Created by tangwenhua on 2022/8/27.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -44,23 +40,23 @@ void CreLinkListTail(LinkList L, int n){
     //}
 }
 
+//使用头插法对带头结点的单链表进行反转
 void headReverse(LinkList L) {
     if (L == NULL || L->next == NULL) {
         return;
     }
-    LNode *q, *p, *r;
-    p = L->next; r=p->next;//p为第一个结点，r为第二个结点
-    L->next = NULL; p->next=NULL;//头结点断链，第一个结点断链
-    while(r){
-        q=p;
-        p=r;
-        r=r->next;
-        p->next=q;
+    //借助两个指针
+    LNode *p, *q;
+    p = L->next;
+    L->next = NULL;
+
+    while(p != NULL){
+        q = p;
+        p = p->next;
+        q->next = L->next;
+        L->next = q;
     }
-    L->next=p;
 }
-
-
 //输出链表信息
 void OutPut(LinkList L) {
     LNode *p;
