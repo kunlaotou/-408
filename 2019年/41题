@@ -1,1 +1,94 @@
 
+#include <stdio.h>
+#include <stdlib.h>
+
+//单链表结构体
+typedef int ElemType;
+typedef struct node{
+    ElemType data;
+    struct node* next;//next指向结点本身
+}LNode, *LinkList;
+
+
+//尾部插入法:带头结点(输入数据与输出数据相同)
+void CreLinkListTail(LinkList L, int n){
+    LNode* s, * r;//r结点
+    ElemType x;
+    int i;
+    r = L;//r结点的初始化，首先指向链表L
+    printf("带头结点尾插法--输入结点:\n");
+    for (i = 0; i < n; i++){
+        scanf("%d", &x);
+        s = (LNode*)malloc(sizeof(LNode));
+        s->next = NULL;//修改
+        s->data = x;
+        //上面三条语句和头部插入法相同
+        r->next = s;//r的下一个结点是s
+        r = s;//r指向s
+    }
+    //if (r != NULL)//r后没有结点 //修改
+    //{
+    //    r->next = NULL;
+    //}
+}
+
+void Change_List(LinkList L){
+    LNode *p, *q, *r, *s;
+    p=q=L;
+    while (q->next!=NULL){      //寻找中间节点
+        p=p->next;              //p走一步
+        q=q->next;
+        if(q->next!=NULL){
+            q = q->next;        //q走两步
+        }
+    }
+    q = p->next;          //p所指结点为中间结点，q为后半段链表的首结点
+    p->next = NULL;
+    while (q!=NULL){      //将链表后半段逆置
+        r = q->next;
+        q->next = p->next;
+        p->next=q;
+        q=r;
+    }
+    s = L->next;           //s指向前半段的第一个数据结点，即插入点
+    q = p->next;           //q指向后半段的第一个数据结点
+    p->next=NULL;
+    while (q!=NULL){       //来回交替插入节点
+        r=q->next;
+        q->next=s->next;
+        s->next=q;
+        s=q->next;
+        q=r;
+    }
+}
+
+
+
+
+//输出链表信息
+void OutPut(LinkList L) {
+    LNode *p;
+    p = L;    //p = L->next; 修改
+    while (p != NULL) {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
+
+
+int main() {
+    int n;//n个结点
+    printf("请在键盘中输入链表有几个结点:\n");
+    scanf("%d", &n);//输入n个结点
+    LinkList L = (LinkList)malloc(sizeof(LNode));//空链表的创建
+    L->next = NULL;//指针域为空
+    CreLinkListTail(L, n);//尾插入法建立单链表L
+    printf("尾插法--输出建立后的单链表:\n");
+    OutPut(L->next); //输出建立后的单链表
+
+    Change_List(L);
+    OutPut(L->next); //输出建立后的单链表
+
+    return 0;
+}
