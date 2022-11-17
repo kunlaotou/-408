@@ -1,6 +1,5 @@
 //
 // Created by 唐文华 on 2022/11/16.
-// 这是暴力求解，最简单的方法，也是最容易想到的方法
 //
 
 #include<stdio.h>
@@ -40,11 +39,12 @@ void Quick(int* arr, int low, int high){
         Quick(arr, par + 1, high);
     }
 }
+//快速排序
 void QuickSort(int* arr, int len){
     Quick(arr, 0, len - 1);//参数一致
 }
 
-//快速排序
+//方法一：暴力破解，这是最简单的方法，也是最容易想到的方法
 int SetPartition(int nums[], int n) {
     int S1 = 0, S2 = 0, sum = 0;
     QuickSort(nums, n);
@@ -87,18 +87,47 @@ int SetPartition(int nums[], int n) {
         printf("\n");
         return (S2 - S1);
     }
-
 }
 
-int main(){
+//方法二：利用快速排序的特点优化的方法
+int setPartition_better(int nums[], int n){
+    int pivotkey, low = 0, low0 = 0, high = n-1, hign0 = n - 1, flag = 1, k = n/2,i;
+    int s1 = 0, s2 = 0;
+    while (flag){
+        pivotkey = nums[low];   //选择最左边值为枢轴
+        while (low < high){
+            while (low < high && nums[high] >= pivotkey)  high--;
+            if(low!=high){
+                nums[low] = nums[high];
+            }
+            while (low < high && nums[low] <= pivotkey) low++;
+            if(low!=high) nums[high] = nums[low];
+        }
+        nums[low] = pivotkey;
+        if(low == k - 1)
+            flag = 0;
+        else{
+            if(low < k - 1){
+                low0 = ++low; high=hign0;
+            } else{
+                hign0 = --high; low = low0;
+            }
+        }
+    }
+    for (int i = 0; i < k ; i++)  s1 += nums[i];
+    for (int i = k; i < n ; i++)  s2 += nums[i];
+    return s2 - s1;
+}
 
+//调试程序时，一定要注意参数n的数值
+int main(){
 //    int A[6] = {9, 4, 2, 5, 8, 7};
     int A[9] = {2, 4, 1, 5, 9, 7,6,3,8};
 
     int res = SetPartition(A,9);
+//    int res = setPartition_better(A,6);
     printf("S2和S1之间的差值最大值为：%d\n", res);
-
-
 
     return 0;
 }
+
