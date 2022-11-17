@@ -1,0 +1,104 @@
+//
+// Created by 唐文华 on 2022/11/16.
+// 这是暴力求解，最简单的方法，也是最容易想到的方法
+//
+
+#include<stdio.h>
+#include <stdbool.h>
+#include <limits.h>
+#include "math.h"
+
+//快速排序
+int Partition(int* arr, int low, int high){
+    //一次划分
+    int tmp = arr[low];//基准
+    while (low < high){
+        //（1）从后往前找比基准小的数字
+        while (low<high && arr[high]>tmp){
+            high--;
+        }
+        if (low < high){
+            arr[low] = arr[high];
+        }
+        //（2）从前往后找比基准大的数字
+        while (low < high && arr[low] <= tmp){
+            low++;
+        }
+        if (low < high){
+            arr[high] = arr[low];
+        }
+    }
+    arr[low] = tmp;
+    return low;
+}
+void Quick(int* arr, int low, int high){
+    int par = Partition(arr,low, high);
+    if (low < par - 1){//左边数据超过一个
+        Quick(arr, low, par - 1);
+    }
+    if (par + 1 < high){//右边数据超过一个{
+        Quick(arr, par + 1, high);
+    }
+}
+void QuickSort(int* arr, int len){
+    Quick(arr, 0, len - 1);//参数一致
+}
+
+//快速排序
+int SetPartition(int nums[], int n) {
+    int S1 = 0, S2 = 0, sum = 0;
+    QuickSort(nums, n);
+    for(int i = 0; i < n; i++) sum += nums[i];
+
+    if(n % 2 == 0){
+        for(int i = 0; i < n/2; i++){
+            S1 += nums[i];
+        }
+        S2 = sum - S1;
+        printf("A1的的元素为:");
+        for(int i = 0; i < n/2; i++){
+            printf("%d",nums[i]);
+            printf(" ");
+        }
+        printf("\n");
+        printf("A2的的元素为:");
+        for(int i = n/2; i < n; i++){
+            printf("%d",nums[i]);
+            printf(" ");
+        }
+        printf("\n");
+        return (S2 - S1);
+    } else{
+        for(int i = n/2; i < n; i++){
+            S2 += nums[i];
+        }
+        S1 = sum - S2;
+        printf("A1的的元素为:");
+        for(int i = 0; i < n/2; i++){
+            printf("%d",nums[i]);
+            printf(" ");
+        }
+        printf("\n");
+        printf("A2的的元素为:");
+        for(int i = n/2; i < n; i++){
+            printf("%d",nums[i]);
+            printf(" ");
+        }
+        printf("\n");
+        return (S2 - S1);
+    }
+
+}
+
+int main(){
+
+//    int A[6] = {9, 4, 2, 5, 8, 7};
+    int A[9] = {2, 4, 1, 5, 9, 7,6,3,8};
+
+    int res = SetPartition(A,9);
+    printf("S2和S1之间的差值最大值为：%d\n", res);
+
+
+
+    return 0;
+}
